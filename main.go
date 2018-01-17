@@ -4,16 +4,15 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"math/rand"
 
 	"golang.org/x/exp/shiny/driver"
 )
 
+/*
 var (
-	addrFlag = flag.String("addr", ":5555", "server address:port")
-	N        = 100
+	N = 100
 )
 
 type CellState uint8
@@ -184,6 +183,7 @@ func (g *Grid) Evolve() {
 		cellsToSwitchState[i].switchState()
 	}
 }
+*/
 
 var grid *Grid
 
@@ -193,7 +193,5 @@ func init() {
 }
 
 func main() {
-	flag.Parse()
-
 	driver.Main(GridGraph)
 }
