@@ -67,7 +67,7 @@ func Plot(grid *Grid) {
 	points := NewPoints(grid)
 	sca, _ := plotter.NewScatter(points)
 	sca.GlyphStyle.Color = color.RGBA{255, 0, 0, 255}
-	sca.GlyphStyle.Radius = vg.Points(2.5)
+	sca.GlyphStyle.Radius = vg.Points(1.5)
 	sca.GlyphStyle.Shape = draw.BoxGlyph{}
 	p, _ := plot.New()
 	setAxisStyle(&p.X)

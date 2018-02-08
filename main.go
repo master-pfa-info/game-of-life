@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	N        = 100
+	N        = 150
 	addrFlag = flag.String("addr", ":5555", "server address:port")
 )
 
