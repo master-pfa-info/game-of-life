@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	N = 100
+	N        = 100
+	addrFlag = flag.String("addr", ":5555", "server address:port")
 )
 
 type CellState uint8
@@ -246,27 +247,13 @@ func main() {
 	// Simple example of grid construction and initialization
 	grid := NewGrid()
 	//grid.InitToto()
-	grid.InitFirstExampleVideo()
+	//grid.InitFirstExampleVideo()
+	grid.InitCanonAPlaneur()
 	for i := 0; ; i++ {
 		fmt.Println("step", i)
-		time.Sleep(100 * time.Millisecond)
+		// 		time.Sleep(1 * time.Millisecond)
 		grid.Evolve()
 		Plot(grid)
 	}
 	///////////////////////////////////////////////////////////////
 }
-
-/*
- var grid *Grid
-
-func init() {
-	grid = NewGrid()
-	// 	grid.InitRandom()
-	// 		grid.InitConway()
-	grid.InitCanonAPlaneur()
-	// 	grid.Init4Clignotants()
-}
-func main() {
-	driver.Main(GridGraph)
-}
-*/
