@@ -6,10 +6,6 @@ import (
 	"image/color"
 
 	"go-hep.org/x/hep/hplot"
-	"go-hep.org/x/hep/hplot/vgshiny"
-	"golang.org/x/exp/shiny/screen"
-	"golang.org/x/mobile/event/key"
-	"golang.org/x/mobile/event/paint"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
@@ -53,6 +49,7 @@ func setAxisStyle(a *plot.Axis) {
 	a.Tick.Length = 0
 }
 
+/*
 func Plot(g *Grid) *hplot.Plot {
 	points := NewPoints(g)
 	sca, _ := plotter.NewScatter(points)
@@ -95,4 +92,27 @@ func GridGraph(scr screen.Screen) {
 		}
 		return true
 	})
+}
+*/
+
+func Plot(grid *Grid) {
+	points := NewPoints(grid)
+	sca, _ := plotter.NewScatter(points)
+	sca.GlyphStyle.Color = color.RGBA{255, 0, 0, 255}
+	sca.GlyphStyle.Radius = vg.Points(3.5)
+	sca.GlyphStyle.Shape = draw.BoxGlyph{}
+	p, _ := plot.New()
+	p.X.Min = -0.5
+	p.X.Max = float64(N) + 0.5
+	p.X.Label.Text = "j"
+	p.Y.Min = -0.5
+	p.Y.Max = float64(N) + 0.5
+	p.Y.Label.Text = "i"
+	p.X.Tick.Marker = &hplot.FreqTicks{N: N + 2, Freq: 1}
+	p.X.Tick.Label.Font.Size = 0
+	p.Y.Tick.Marker = &hplot.FreqTicks{N: N + 2, Freq: 1}
+	p.Y.Tick.Label.Font.Size = 0
+	p.Add(sca, plotter.NewGrid())
+	p.Save(8*vg.Inch, 8*vg.Inch, "Grid2D.png")
+	datac <- Plots{Plot: renderSVG(p)}
 }

@@ -4,10 +4,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"math/rand"
-
-	"golang.org/x/exp/shiny/driver"
+	"time"
 )
 
 var (
@@ -237,7 +237,27 @@ func (g *Grid) Evolve() {
 	}
 }
 
-var grid *Grid
+func main() {
+	flag.Parse()
+	rand.Seed(time.Now().UTC().UnixNano())
+	go webServer(addrFlag)
+
+	///////////////////////////////////////////////////////////////
+	// Simple example of grid construction and initialization
+	grid := NewGrid()
+	//grid.InitToto()
+	grid.InitFirstExampleVideo()
+	for i := 0; ; i++ {
+		fmt.Println("step", i)
+		time.Sleep(100 * time.Millisecond)
+		grid.Evolve()
+		Plot(grid)
+	}
+	///////////////////////////////////////////////////////////////
+}
+
+/*
+ var grid *Grid
 
 func init() {
 	grid = NewGrid()
@@ -246,7 +266,7 @@ func init() {
 	grid.InitCanonAPlaneur()
 	// 	grid.Init4Clignotants()
 }
-
 func main() {
 	driver.Main(GridGraph)
 }
+*/
