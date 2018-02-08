@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"image/color"
 	"log"
+	"net"
 	"net/http"
+	"strconv"
 
 	"go-hep.org/x/hep/hplot"
 	"golang.org/x/net/websocket"
@@ -77,10 +79,43 @@ func Plot(grid *Grid) {
 	datac <- Plots{Plot: renderSVG(p)}
 }
 
+func getTCPPort() (string, error) {
+	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
+	if err != nil {
+		return "", err
+	}
+	l, err := net.ListenTCP("tcp", addr)
+	if err != nil {
+		return "", err
+	}
+	defer l.Close()
+	return strconv.Itoa(l.Addr().(*net.TCPAddr).Port), nil
+}
+
+func getIP() net.IP {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP
+}
+
 func webServer(addrFlag *string) {
+	port, err := getTCPPort()
+	if err != nil {
+		log.Fatal(err)
+	}
+	ip := getIP()
+	log.Printf("listening on %s:%s", ip, port)
+
 	http.HandleFunc("/", plotHandle)
 	http.Handle("/data", websocket.Handler(dataHandler))
-	err := http.ListenAndServe(*addrFlag, nil)
+	// 	err = http.ListenAndServe(*addrFlag, nil)
+	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		panic(err)
 	}
